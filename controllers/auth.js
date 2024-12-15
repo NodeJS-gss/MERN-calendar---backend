@@ -97,6 +97,8 @@ const renewtoken = async(req, res = response) => {
 
     res.json({
         ok: true,
+        uid: user.uid,
+        name: user.name,
         token
     });
 

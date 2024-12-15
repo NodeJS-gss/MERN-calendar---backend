@@ -13,18 +13,18 @@ const getEvents = async(req, res = response) => {
 
 const createEvent = async(req, res = response) => {
 
-    const event = new Event(req.body);
+    const eventReq = new Event(req.body);
     const user = req.user;
     
     try {
 
-        event.user = user.uid;
+        eventReq.user = user.uid;
 
-        const eventDB = await event.save();
+        const event = await eventReq.save();
 
         res.json({
             ok: true,
-            eventDB
+            event
         });
         
     } catch (error) {
@@ -43,16 +43,16 @@ const updateEvent = async(req, res = response) => {
 
     try {
 
-        const event = await Event.findById(eventId);
+        const eventDB = await Event.findById(eventId);
 
-        if(!event) {
+        if(!eventDB) {
             return res.status(404).json({
                 ok: false,
                 msg: 'Event not found'
             });
         }
 
-        if( event.user.toString() !== user.uid ) {
+        if( eventDB.user.toString() !== user.uid ) {
             return res.status(401).json({
                 ok: false,
                 msg: 'Event cannot be updated'
@@ -68,7 +68,7 @@ const updateEvent = async(req, res = response) => {
 
         res.json({
             ok: true,
-            eventUpdated
+            event: eventUpdated
         });    
         
     } catch (error) {
